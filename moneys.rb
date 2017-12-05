@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
+
 require 'net/http'
 require 'json'
 
 Thread.abort_on_exception = true
 
-puts "starting quadrigacx [qcx]"
 qcx_thread = Thread.new do
+	puts "starting quadrigacx [qcx]"
+
 	quadrigacx_templ=URI "https://api.quadrigacx.com/v2/ticker?book=%s"
 
 	(
-		%w{btc_cad eth_cad btg_cad}.each_with_object (
+		%w{ btc_cad eth_cad btg_cad }.each_with_object (
 			(Net::HTTP.new quadrigacx_templ.host, quadrigacx_templ.port).tap do |http|
 				puts "qcx: connecting…"
 				http.use_ssl = true
@@ -26,36 +28,34 @@ end
 puts "starting binance [bin]"
 binance_tickers = URI 'https://api.binance.com/api/v1/ticker/allBookTickers'
 
-res_binance = JSON.parse (
-	(Net::HTTP.new binance_tickers.host, binance_tickers.port).tap do |http|
-		puts "bin: connecting…"
-		http.use_ssl = true
-		http.start
-		puts "bin: …connected"
-	end.request Net::HTTP::Get.new binance_tickers
-).read_body
-
-iota_in_btc = Rational (res_binance.find do |syms|
-	"IOTABTC" == (syms.fetch "symbol")
-end.fetch "bidPrice")
+iota_in_btc = Rational (
+	(
+		JSON.parse (
+			(Net::HTTP.new binance_tickers.host, binance_tickers.port).tap do |http|
+				puts "bin: connecting…"
+				http.use_ssl = true
+				http.start
+				puts "bin: …connected"
+			end.request Net::HTTP::Get.new binance_tickers
+		).read_body
+	).find do |syms|
+		"IOTABTC" == (syms.fetch "symbol")
+	end.fetch "bidPrice"
+)
 
 printf "bin: MIOTA is worth %f BTC\n", iota_in_btc
 
 puts "bin: done. waiting to parse quadrigacx… (qcx_thread status: #{qcx_thread.status})"
 
-res_quadrigacx = qcx_thread.value.tap do
+qcx_tickers = qcx_thread.value.tap do
 	puts "qcx: done\n"
 end.map do |book, ticker_vals|
-	[ book, (JSON.parse ticker_vals.read_body) ]
+	hilolt = ((JSON.parse ticker_vals.read_body).values_at "high","low","last").map &:to_r
+	puts "#{book} high/low/last: " + ((hilolt.map &:to_f).join ", ")
+	[ book, hilolt ]
 end
 
-puts (res_quadrigacx.map do |book, ticker_vals|
-	"#{book} high/low/last: " + ((ticker_vals.values_at "high","low","last").join ", ")
-end.join "\n")
-
-btc_cad, eth_cad, btg_cad = %w{btc_cad eth_cad btg_cad}.map do |qtick|
-	((res_quadrigacx.assoc qtick).last.values_at "high","low","last").map &:to_r
-end
+btc_cad, eth_cad, btg_cad = qcx_tickers.map &:last
 
 costs_to_date = ARGV[0..-5].reduce 0 do |s,c| s += c.to_r end
 iota_held, btg_held, btc_held, eth_held = (-4..-1).map do |idx| Rational ARGV[idx], 100000000 end
