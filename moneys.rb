@@ -60,14 +60,17 @@ btc_cad, eth_cad, btg_cad = qcx_tickers.map &:last
 costs_to_date = ARGV[0..-5].reduce 0 do |s,c| s += c.to_r end
 iota_held, btg_held, btc_held, eth_held = (-4..-1).map do |idx| Rational ARGV[idx], 100000000 end
 
-printf "done!\n\nDo you like money? You have made CAD $%s moneys as of right now. Good job.™\n\n\n", (
-	(
-		(
-			btc_cad.last * btc_held +
-			eth_cad.last * eth_held +
-			btg_cad.last * btg_held +
-			btc_cad.last * iota_held * iota_in_btc -
-			costs_to_date
-		) * 100000
-	).to_i.to_s.insert -6, "."
-)
+holdings_in_cad = btc_cad.last * btc_held +
+	eth_cad.last * eth_held +
+	btg_cad.last * btg_held +
+	btc_cad.last * iota_held * iota_in_btc
+
+printf "done!\n\nOkay, here's how it looksⓇ:\n\n\t* you have CAD $%s held in total\n\t\t* btc:\t$%s\n\t\t* eth:\t$%s\n\t\t* btg:\t$%s\n\t\t* iota:\t$%s\n\t* less costs of $%s…\n\t* …makes $%s earned to date\n\t* return as a percentage is %s%%.\n\nGreat Work™\n\n\n",
+	((holdings_in_cad*100000).to_i.to_s.insert -6,"."),
+	((btc_cad.last*btc_held*100000).to_i.to_s.insert -6,"."),
+	((format "%06i",(eth_cad.last*eth_held*100000).to_i).insert -6,"."),
+	((btg_cad.last*btg_held*100000).to_i.to_s.insert -6,"."),
+	((btc_cad.last*iota_held*iota_in_btc*100000).to_i.to_s.insert -6,"."),
+	((costs_to_date*100000).to_i.to_s.insert -6,"."),
+	(((holdings_in_cad-costs_to_date)*100000).to_i.to_s.insert -6,"."),
+	((10000*(holdings_in_cad - costs_to_date)/costs_to_date).to_i.to_s.insert -3,".")
