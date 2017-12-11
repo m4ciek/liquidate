@@ -66,13 +66,24 @@ holdings_in_cad = btc_cad.last * btc_held +
 	ltc_cad.last * ltc_held +
 	btc_cad.last * iota_held * iota_in_btc
 
-printf "done!\n\nOkay, here's how it looksⓇ:\n\n\t* you have CAD $%s held in total\n\t\t* btc:\t$%s\n\t\t* eth:\t$%s\n\t\t* btg:\t$%s\n\t\t* iota:\t$%s\n\t\t* ltc:\t$%s\n\t* less costs of $%s…\n\t* …makes $%s earned to date\n\t* return as a percentage is %s%%.\n\nGreat Work™\n\n\n",
-	((holdings_in_cad*100000).to_i.to_s.insert -6,"."),
+printf "done!\n\n" +
+	"Okay, here's how it looksⓇ:\n\n" +
+	"\t* you have CAD $%s held in total\n" +
+		"\t\t* btc:\t$%s\n" +
+		"\t\t* eth:\t$%s\n" + 
+		"\t\t* btg:\t$%s\n" +
+		"\t\t* iota:\t$%s\n" +
+		"\t\t* ltc:\t$%s\n" +
+	"\t* less costs of $%s…\n" +
+	"\t* …makes $%s earned to date\n" +
+	"\t* return as a percentage is %s%%.\n" +
+	"\nGreat Work™\n\n\n",
+	((format "%06i", holdings_in_cad*100000).insert -6,"."),
 	((format "%06i", btc_cad.last*btc_held*100000).insert -6,"."),
-	((format "%06i",(eth_cad.last*eth_held*100000).to_i).insert -6,"."),
-	((btg_cad.last*btg_held*100000).to_i.to_s.insert -6,"."),
+	((format "%06i", eth_cad.last*eth_held*100000).insert -6,"."),
+	((format "%06i", btg_cad.last*btg_held*100000).insert -6,"."),
 	((format "%06i", btc_cad.last*iota_held*iota_in_btc*100000).insert -6,"."),
-	((ltc_cad.last*ltc_held*100000).to_i.to_s.insert -6,"."),
-	((costs_to_date*100000).to_i.to_s.insert -6,"."),
-	(((holdings_in_cad-costs_to_date)*100000).to_i.to_s.insert -6,"."),
-	((10000*(holdings_in_cad - costs_to_date)/costs_to_date).to_i.to_s.insert -3,".")
+	((format "%06i", ltc_cad.last*ltc_held*100000).insert -6,"."),
+	((format "%06i", costs_to_date*100000).insert -6,"."),
+	((format "%06i", (holdings_in_cad-costs_to_date)*100000).insert -6,"."),
+	((format "%04i", 10000*(holdings_in_cad - costs_to_date)/costs_to_date).insert -3,".")
