@@ -1,0 +1,37 @@
+maciek@fiasco:~/src/github/liquidate$ date;ruby moneys.rb $((400)) 91300000 $((3335000+271500+167359000)) $((6073855+1938188-1938188-6073855))  $((35000000-35000000+13026)) $((199000000-199000000)) 0
+Tue Dec 12 16:10:39 MST 2017
+starting binance [bin]
+starting quadrigacx [qcx]
+qcx: connecting…
+bin: connecting…
+qcx: …connected
+qcx: btc_cad
+bin: …connected
+bin: MIOTA is worth 0.000262 BTC
+bin: done. waiting to parse quadrigacx… (qcx_thread status: sleep)
+qcx: eth_cad
+qcx: btg_cad
+qcx: ltc_cad
+qcx: bch_cad
+qcx: done
+btc_cad high/low/last: 21999.0, 20450.0, 21838.0
+eth_cad high/low/last: 794.98, 607.01, 777.98
+btg_cad high/low/last: 355.0, 293.75, 350.0
+ltc_cad high/low/last: 432.99, 263.0, 371.04
+bch_cad high/low/last: 2000.0, 1719.01, 1999.89
+done!
+
+Okay, here's how it looksⓇ:
+
+	* you have CAD $603.69539 held in total
+		* btc:	$0.00000
+		* eth:	$0.10133
+		* btg:	$598.37925
+		* iota:	$5.21480
+		* ltc:	$0.00000
+		* bch:	$0.00000
+	* less costs of $400.00000…
+	* …makes $203.69539 earned to date
+	* return as a percentage is 50.92%.
+
+Great Work™
