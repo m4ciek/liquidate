@@ -60,24 +60,27 @@ btc_cad, eth_cad, btg_cad, ltc_cad, bch_cad = qcx_tickers.map &:last
 costs_to_date = ARGV[0..-7].reduce 0 do |s,c| s += c.to_r end
 iota_held, btg_held, btc_held, eth_held, ltc_held, bch_held = (-6..-1).map do |idx| Rational ARGV[idx], 100000000 end
 
-holdings_in_cad = btc_cad.last * btc_held +
+holdings_in_cad =
+	btc_cad.last * btc_held +
 	eth_cad.last * eth_held +
 	btg_cad.last * btg_held +
 	ltc_cad.last * ltc_held +
 	bch_cad.last * bch_held +
 	btc_cad.last * iota_held * iota_in_btc
 
-printf "done!\n\n" +
+puts (
+	"done!\n\n" +
 	"Okay, here's how it looksⓇ:\n\n" +
-	"\t* you have CAD $%s held in total\n" +
+	"\t* you have CAD $%i.%02i held in total\n" +
 		(%w{ btc eth btg iota ltc bch }.map do |tck| 
-			"\t\t* #{tck}:\t$%s\n"
+			"\t\t* #{tck}:\t$%i.%02i\n"
 		end.join) +
-	"\t* less costs of $%s…\n" +
-	"\t* …makes $%s earned to date\n" +
-	"\t* return as a percentage is %s%%.\n" +
-	"\nGreat Work™\n\n\n",
-	*(
+	"\t* less costs of $%i.%02i…\n" +
+	"\t* …makes $%i.%02i earned to date\n" +
+	"\t* return as a percentage is %02i.%01i%%.\n" +
+	"\nGreat Work™\n\n"
+) % (
+	(
 		[
 			holdings_in_cad,
 			btc_cad.last * btc_held,
@@ -88,12 +91,11 @@ printf "done!\n\n" +
 			bch_cad.last * bch_held,
 			costs_to_date,
 			holdings_in_cad - costs_to_date
-		].map do |amt|
-			(format "%06i", 100000 * amt).insert -6, "."
+		].flat_map do |amt|
+			(amt * 1000).divmod 1000
 		end
-	),
-	(
-		(
-			format "%04i", 10000 * (holdings_in_cad - costs_to_date) / costs_to_date
-		).insert -3,"."
+	) + (
+		( 100000 * (holdings_in_cad - costs_to_date) /
+			 costs_to_date ).divmod 1000
 	)
+)
