@@ -1,0 +1,45 @@
+$ date;ruby -r pry moneys.rb $((400)) 91300000 $((3335000+271500+167359000-167359000)) $((6073855+1938188-1938188-6073855+2677120-2677120+2800447))  $((35000000-35000000+13026)) $((199000000-199000000)) 0 $((223841341157 -223841341157))
+Thu Dec 14 15:23:23 MST 2017
+starting binance [bin]
+starting quadrigacx [qcx]
+starting bittrex [btx]
+qcx: connecting…
+bin: connecting…
+btx: connecting…
+btx: …connected
+btx: BTC-ADA
+qcx: …connected
+qcx: btc_cad
+qcx: eth_cad
+bin: …connected
+qcx: btg_cad
+qcx: ltc_cad
+bin: MIOTA: askPrice/bidPrice = 0.000208/0.000208 BTC
+waiting to parse bittrex… (btx_thread status: false)
+btx: ready
+BTC-ADA Bid/Ask/Last: 1165, 1167, 1167
+waiting to parse quadrigacx… (qcx_thread status: sleep)
+qcx: bch_cad
+qcx: ready
+btc_cad high/low/last: 21009.0, 19935.69, 20799.99
+eth_cad high/low/last: 912.99, 830.0, 876.48
+btg_cad high/low/last: 400.0, 301.01, 400.0
+ltc_cad high/low/last: 386.0, 321.0, 349.26
+bch_cad high/low/last: 2500.0, 1909.01, 2264.99
+done!
+
+Okay, here's how it looksⓇ:
+
+	* you have CAD $600.980 held in total
+		* btc:	$582.492
+		* eth:	$0.114
+		* btg:	$14.426
+		* iota:	$3.947
+		* ltc:	$0.00
+		* bch:	$0.00
+		* ada:	$0.00
+	* less costs of $400.00…
+	* …makes $200.980 earned to date
+	* return as a percentage is 50.245%.
+
+Great Work™
