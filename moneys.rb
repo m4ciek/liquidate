@@ -94,17 +94,19 @@ end.map do |book, ticker_vals|
 end
 
 btc_cad, eth_cad, btg_cad, ltc_cad, bch_cad = qcx_tickers.map &:last
+cad_cad = [ 1, 1, 1 ]
 
 ada_in_btc, = btx_tickers.map &:last
 
-costs_to_date = ARGV[0..-8].reduce 0 do |s,c| s += c.to_r end
+costs_to_date = ARGV[0..-9].reduce 0 do |s,c| s += c.to_r end
 
-iota_held, btg_held, btc_held, eth_held, ltc_held, bch_held, ada_held =
-	(-7..-1).map do |idx|
+cad_held, iota_held, btg_held, btc_held, eth_held, ltc_held, bch_held, ada_held =
+	(-8..-1).map do |idx|
 		Rational ARGV[idx], 100000000
 	end
 
 holdings_in_cad =
+	cad_held +
 	btc_cad.last * btc_held +
 	eth_cad.last * eth_held +
 	btg_cad.last * btg_held +
@@ -117,7 +119,7 @@ puts (
 	"done!\n\n" +
 	"Okay, here's how it looksⓇ:\n\n" +
 	"\t* you have CAD $%i.%02i held in total\n" +
-		(%w{ btc eth btg iota ltc bch ada }.map do |tck| 
+		(%w{ cad btc eth btg iota ltc bch ada }.map do |tck| 
 			"\t\t* #{tck}:\t$%i.%02i\n"
 		end.join) +
 	"\t* less costs of $%i.%02i…\n" +
@@ -128,6 +130,7 @@ puts (
 	(
 		[
 			holdings_in_cad,
+			cad_cad.last * cad_held,
 			btc_cad.last * btc_held,
 			eth_cad.last * eth_held,
 			btg_cad.last * btg_held,
