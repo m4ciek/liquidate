@@ -20,7 +20,7 @@ cx_list = [
 # {"success":true,"message":"","result":{"Bid":0.00001184,"Ask":0.00001185,"Last":0.00001185}}
 
 	[ "bittrex", "btx", "https://bittrex.com/api/v1.1/public/getticker?market=%s",
-		%w{ BTC-ADA },
+		%w{ BTC-ADA BTC-DOGE },
 		->(api_res) do
 			(api_res.fetch "result").values_at "Bid", "Ask", "Last"
 		end
